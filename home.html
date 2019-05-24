@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>SpotYourLondonPlace</title>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+
+  <body>
+
+    <div class="topnav" id="myTopnav">
+      <a href="#home" class="active">Home</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+
+      <div class="container">
+        <h1 class="logo">SpotYourLondonPlace </h1>
+        <p>Would you like to know your top artist?!</p>
+        <p>Let Spotify match your listening habits to the coolest places in London</p>
+        <strong><nav>
+            <ul class="menu">
+              <li><a href="{{url_for('index')}}">Match your music habits</a></li>
+            </ul>
+          </nav></strong>
+      </div>
+
+
+  </body>
+
+
+</html>

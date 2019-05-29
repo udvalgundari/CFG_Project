@@ -1,0 +1,60 @@
+
+
+/* Universal font*/
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    font-family: 'Motserrat',sans-serif;
+    font-size: 16px;
+    line-height: 1.2em;
+    color: #333;
+    font-weight: 400;
+}
+
+.opening-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    background-color: #FAF6EA;
+    background-image: linear-gradient(-200deg, #fff48f 0%, #1DB954 100%);
+}
+
+.content-wrapper .content-main {
+    padding: 40px;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+
+  }
+
+p  {
+  font-size:30px;
+  display: block;
+  line-height: 40px;
+  color: #191414;
+}
+
+.content-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 100px;
+}
+
+
+.content-wrapper .button {
+    border-radius: 30px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 30px;
+    color: #ffffff;
+    background-color: #bd3c63;
+    transition: .2s ease;
+}

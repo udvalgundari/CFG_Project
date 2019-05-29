@@ -45,8 +45,8 @@ auth_query_parameters = {
 
 @app.route("/")
 def home():
-    return render_template("helloworld.html")
-    	
+    return render_template("home.html")
+
 @app.route("/about")
 def about():
 	return render_template("about.html")
@@ -97,8 +97,8 @@ def get_top_tracks(access_token):
     return top_data
 
 def get_ids(top_data):
-	id_tracks= [x['id'] for x in top_data['items']] 
-	names= [x['name'] for x in top_data['items']] 
+	id_tracks= [x['id'] for x in top_data['items']]
+	names= [x['name'] for x in top_data['items']]
 	return (id_tracks, names)
 
 def get_audio_features(access_token, id_tracks):
@@ -116,9 +116,9 @@ def get_audio_features(access_token, id_tracks):
 	ids_d = [x['id'] for x in list_audio_features]
 	danceability = [x['danceability'] for x in list_audio_features]
 	speechiness = [x['speechiness'] for x in list_audio_features]
-    
+
 	return (ids_d, valence, danceability, speechiness )
-	
+
 def get_some_features(list_audio_features):
 	features = DataFrame(audio_features_data['items'])
 # 	print (features)
@@ -138,7 +138,7 @@ def top_artists():
     ids_d, valence, danceability, speechiness = get_audio_features(access_token, ids)
     print (names)
     print (sum(valence)/len(valence))
-    
+
     # Making a plot
     img = StringIO()
     plt.bar(names,valence, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
@@ -146,12 +146,12 @@ def top_artists():
     plt.axhline(y=sum(valence)/len(valence), color='r', linestyle='-')
     plt.title('Valence')
     plt.ylabel('Feeling like Johnny Cash or Cher?')
-    plt.tight_layout() 
+    plt.tight_layout()
     plt.savefig(img,format='png')
     plt.close()
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue())
-    
+
     img2= StringIO()
     plt.bar(names,danceability, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
     plt.xticks([])
@@ -163,7 +163,7 @@ def top_artists():
     plt.close()
     img2.seek(0)
     plot_url2 = base64.b64encode(img2.getvalue())
-    
+
     img3= StringIO()
     plt.bar(names,speechiness, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
     plt.xticks(rotation=75, ha='right')

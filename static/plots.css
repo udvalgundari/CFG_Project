@@ -1,0 +1,22 @@
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+p {
+  font-size:30px;
+  display: block;
+  line-height: 40px;
+  color: #191414;
+  text-align: center;
+}
+
+h1 {
+  font-size:30px;
+  display: block;
+  line-height: 40px;
+  color: #191414;
+  text-align: center;
+}

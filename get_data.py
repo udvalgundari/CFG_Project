@@ -6,12 +6,9 @@ import requests
 import base64
 import urllib
 import pandas as pd
-from pandas import DataFrame
 from cStringIO import StringIO
-import base64
 import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib.figure import Figure
+
 
 # Authentication Steps, paramaters, and responses are defined at https://developer.spotify.com/web-api/authorization-guide/
 app = Flask(__name__)
@@ -182,4 +179,4 @@ def top_artists():
 
 
 if __name__ == "__main__":
-    app.run(debug=True,port=PORT)
+    app.run(debug=False,port=PORT)

@@ -58,3 +58,18 @@ p  {
     background-color: #bd3c63;
     transition: .2s ease;
 }
+
+
+#myContainer {
+  width: 400px;
+  height: 400px;
+  position: relative;
+  background: yellow;
+}
+
+#myAnimation {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background: red;
+}

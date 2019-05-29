@@ -7,6 +7,11 @@ import base64
 import urllib
 import pandas as pd
 from pandas import DataFrame
+from cStringIO import StringIO
+import base64
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.figure import Figure
 
 # Authentication Steps, paramaters, and responses are defined at https://developer.spotify.com/web-api/authorization-guide/
 app = Flask(__name__)
@@ -88,18 +93,16 @@ def profile_data(access_token):
 def get_top_tracks(access_token):
     authorization_header = {"Authorization":"Bearer {}".format(access_token)}
     # Get user top tracks
-    top_api_endpoint = "{}/me/top/tracks".format(SPOTIFY_API_URL)
+    top_api_endpoint = "{}/me/top/tracks?time_range=short_term".format(SPOTIFY_API_URL)
     top_response = requests.get(top_api_endpoint, headers=authorization_header)
     top_data = json.loads(top_response.text)
 #     print (top_data['items'][0].keys() )
     return top_data
 
 def get_ids(top_data):
-
 	id_tracks= [x['id'] for x in top_data['items']] 
 	names= [x['name'] for x in top_data['items']] 
 	return (id_tracks, names)
-
 
 def get_audio_features(access_token, id_tracks):
 	authorization_header = {"Authorization":"Bearer {}".format(access_token)}
@@ -112,14 +115,19 @@ def get_audio_features(access_token, id_tracks):
 # 		print( (id, audio_features_data, list_audio_features) )
 		list_audio_features.append(audio_features_data)
 # 	print (list_audio_features[1])
-	print ( [x['valence'] for x in list_audio_features] )
-	return list_audio_features
+	valence = [x['valence'] for x in list_audio_features]
+	ids_d = [x['id'] for x in list_audio_features]
+	danceability = [x['danceability'] for x in list_audio_features]
+	speechiness = [x['speechiness'] for x in list_audio_features]
+    
+	return (ids_d, valence, danceability, speechiness )
 	
 def get_some_features(list_audio_features):
 	features = DataFrame(audio_features_data['items'])
 # 	print (features)
 	features_subset = features.danceability
 	return features_subset
+
 
 @app.route("/callback/q")
 def top_artists():
@@ -130,24 +138,47 @@ def top_artists():
     display_name = profile_info[0]
     top_tracks = get_top_tracks(access_token)
     ids, names = get_ids(top_tracks)
-    # print (names)
-#     print (ids)
-    features = get_audio_features(access_token, ids)
+    ids_d, valence, danceability, speechiness = get_audio_features(access_token, ids)
+    print (names)
+    print (sum(valence)/len(valence))
     
-    # get_genre = [most_common(artists)]
-#     the_answer= []
-#     for e in get_genre:
-#         if e in london_places:
-#             the_answer.append(london_places.get(e))
-# 
-#     get_genre = [most_common(artists)]
-#     the_answer_info= []
-#     for ei in get_genre:
-#         if ei in london_places_info:
-#             the_answer_info.append(london_places_info.get(ei))
-    # Combine profile and tracks data to display
+    # Making a plot
+    img = StringIO()
+    plt.bar(names,valence, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
+    plt.xticks([])
+    plt.axhline(y=sum(valence)/len(valence), color='r', linestyle='-')
+    plt.title('Valence')
+    plt.ylabel('Feeling like Johnny Cash or Cher?')
+    plt.tight_layout() 
+    plt.savefig(img,format='png')
+    plt.close()
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue())
+    
+    img2= StringIO()
+    plt.bar(names,danceability, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
+    plt.xticks([])
+    plt.title('Danceability')
+    plt.ylabel('Are you in the moood for dancing?')
+    plt.axhline(y=sum(danceability)/len(danceability), color='r', linestyle='-')
+    plt.tight_layout()
+    plt.savefig(img2,format='png')
+    plt.close()
+    img2.seek(0)
+    plot_url2 = base64.b64encode(img2.getvalue())
+    
+    img3= StringIO()
+    plt.bar(names,speechiness, color=['red','tomato','lightsalmon','orange','sandybrown','gold','yellow','greenyellow','lightgreen','limegreen','mediumseagreen','mediumaquamarine','lightskyblue', 'cornflowerblue', 'dodgerblue', 'royalblue', 'darkviolet','mediumorchid','hotpink','lightpink'])
+    plt.xticks(rotation=75, ha='right')
+    plt.axhline(y=sum(speechiness)/len(speechiness), color='r', linestyle='-')
+    plt.title('Speechiness')
+    plt.tight_layout()
+    plt.savefig(img3,format='png')
+    plt.close()
+    img3.seek(0)
+    plot_url3 = base64.b64encode(img3.getvalue())
 
-    return render_template("index.html", info_name = [display_name], danc=features)
+    return render_template("index.html", info_name = [display_name],  plot_url=plot_url, plot_url2=plot_url2, plot_url3=plot_url3 )
 
 
 if __name__ == "__main__":
